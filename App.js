@@ -1,21 +1,50 @@
+import axios from "axios";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, ScrollView, View, Image } from "react-native";
 import Form from "./components/Form";
 import Header from "./components/Header";
+import Quotation from "./components/Quotation";
+// import axios from "axios";
 
 export default function App() {
+  const [moneda, setMoneda] = useState("");
+  const [cryptocurrency, setCryptocurrency] = useState("");
+  const [getapi, setGetApi] = useState(false);
+  const [dataapi, setDataApi] = useState({});
+  console.log(moneda);
+  const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptocurrency}&tsyms=${moneda}`;
+  const getCryptoCurrency = () => {
+    if (getapi) {
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          setGetApi(false);
+          setDataApi(data.DISPLAY[cryptocurrency][moneda]);
+        });
+    }
+  };
+  useEffect(() => {
+    getCryptoCurrency();
+  }, [getapi]);
   return (
-    <View>
+    <ScrollView>
       <Header />
       <Image
         style={styles.image}
         source={require("./assets/img/cryptomonedas.png")}
       />
       <View style={styles.contentForm}>
-        <Form />
+        <Form
+          modena={moneda}
+          cryptocurrency={cryptocurrency}
+          setCryptocurrency={setCryptocurrency}
+          setMoneda={setMoneda}
+          setGetApi={setGetApi}
+        />
       </View>
-    </View>
+      <Quotation dataapi={dataapi} />
+    </ScrollView>
   );
 }
 

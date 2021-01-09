@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Picker } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableHighlight,
+  onPress,
+  Alert,
+} from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 
-const Form = () => {
-  const [moneda, setMoneda] = useState("");
-  const [cryptocurrency, setCryptocurrency] = useState("");
+const Form = ({
+  moneda,
+  cryptocurrency,
+  setMoneda,
+  setCryptocurrency,
+  setGetApi,
+}) => {
   const [cryptocurrencys, setCryptocurrencys] = useState([]);
 
   const consultaApi = async () => {
@@ -12,8 +24,6 @@ const Form = () => {
       "https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD";
     const result = await axios.get(url);
     const respuesta = await result.data.Data;
-    console.log(respuesta);
-    // if (!Object.keys(respuesta)) return null;
     setCryptocurrencys(respuesta);
   };
   useEffect(() => {
@@ -22,10 +32,23 @@ const Form = () => {
 
   const getMoneda = (moneda) => {
     setMoneda(moneda);
-    console.log(moneda);
   };
   const getCrypto = (crypto) => {
     setCryptocurrency(crypto);
+  };
+  const getQuote = () => {
+    if (moneda === "" || cryptocurrency === "") {
+      showAlert();
+      console.log("Mostrando alerta");
+      return;
+    }
+    console.log(cryptocurrency);
+    console.log(moneda);
+    //cambiar el state de consultar la api
+    setGetApi(true);
+  };
+  const showAlert = () => {
+    Alert.alert("Error...", "Ambos Campos Son Obligatorios", [{ text: "ok" }]);
   };
   return (
     <View>
@@ -51,6 +74,9 @@ const Form = () => {
           return <Picker.Item key={Id} label={FullName} value={Name} />;
         })}
       </Picker>
+      <TouchableHighlight onPress={() => getQuote()} style={styles.btnCotizar}>
+        <Text style={styles.btnText}>Cotizar</Text>
+      </TouchableHighlight>
     </View>
   );
 };
@@ -59,6 +85,17 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     fontSize: 22,
     marginVertical: 20,
+  },
+  btnCotizar: {
+    backgroundColor: "#5e49e2",
+    padding: 10,
+    marginTop: 20,
+  },
+  btnText: {
+    color: "#fff",
+    fontSize: 18,
+    textTransform: "uppercase",
+    textAlign: "center",
   },
 });
 export default Form;
