@@ -12,7 +12,7 @@ export default function App() {
   const [cryptocurrency, setCryptocurrency] = useState("");
   const [getapi, setGetApi] = useState(false);
   const [dataapi, setDataApi] = useState({});
-  console.log(moneda);
+  // console.log(moneda);
   const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${cryptocurrency}&tsyms=${moneda}`;
   const getCryptoCurrency = () => {
     if (getapi) {

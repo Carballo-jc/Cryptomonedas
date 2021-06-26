@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 const Quotation = ({ dataapi }) => {
   if (Object.keys(dataapi).length === 0) return null;
   const { PRICE, HIGHDAY, LOWDAY, CHANGEPCT24HOUR, LASTUPDATE } = dataapi;
-  console.log(dataapi);
+  // console.log(dataapi);
   return (
     <View style={styles.container}>
       <Text style={styles.text}>

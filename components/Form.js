@@ -8,7 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import axios from "axios";
+import useCoins from "../hooks/useCoins";
 
 const Form = ({
   moneda,
@@ -17,18 +17,19 @@ const Form = ({
   setCryptocurrency,
   setGetApi,
 }) => {
-  const [cryptocurrencys, setCryptocurrencys] = useState([]);
+  const [{ coinsFilter }] = useCoins();
+  // const [cryptocurrencys, setCryptocurrencys] = useState([]);
 
-  const consultaApi = async () => {
-    const url =
-      "https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD";
-    const result = await axios.get(url);
-    const respuesta = await result.data.Data;
-    setCryptocurrencys(respuesta);
-  };
-  useEffect(() => {
-    consultaApi();
-  }, []);
+  // const consultaApi = async () => {
+  //   const url =
+  //     "https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD";
+  //   const result = await axios.get(url);
+  //   const respuesta = await result.data.Data;
+  //   setCryptocurrencys(respuesta);
+  // };
+  // useEffect(() => {
+  //   consultaApi();
+  // }, []);
 
   const getMoneda = (moneda) => {
     setMoneda(moneda);
@@ -42,8 +43,7 @@ const Form = ({
       console.log("Mostrando alerta");
       return;
     }
-    console.log(cryptocurrency);
-    console.log(moneda);
+
     //cambiar el state de consultar la api
     setGetApi(true);
   };
@@ -69,17 +69,20 @@ const Form = ({
         onValueChange={(crypto) => getCrypto(crypto)}
       >
         <Picker.Item label={"- Seleccione -"} value={""} />
-        {cryptocurrencys.map((crypto) => {
+        {coinsFilter.map((crypto) => {
           const { FullName, Id, Name } = crypto.CoinInfo;
           return <Picker.Item key={Id} label={FullName} value={Name} />;
         })}
       </Picker>
-      <TouchableHighlight onPress={() => getQuote()} style={styles.btnCotizar}>
+      <TouchableHighlight
+        onPress={(crypto) => getQuote(crypto)}
+        style={styles.btnCotizar}
+      >
         <Text style={styles.btnText}>Cotizar</Text>
       </TouchableHighlight>
     </View>
   );
-};
+};;;
 const styles = StyleSheet.create({
   label: {
     textTransform: "uppercase",
