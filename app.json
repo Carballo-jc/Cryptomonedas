@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Es un proyecto de prueba que aun se esta mejorando la interfaz grafica",
+    "githubUrl": "https://github.com/Carballo-jc/Cryptomonedas"
   }
 }
